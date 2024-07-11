@@ -235,10 +235,63 @@ try {
 
 //User.findAll().then((data)=> console.log(data))
 });
-app.post("/api/organisations", (req, res)=> {
-    
+app.post("/api/organisations", async (req, res)=> {
+    const orgname = req.body.name;
+    const orgdescription = req.body.description;
+    try {
+        if (!orgname || !orgdescription) {
+            res.send({
+                status: "error",
+                message : "please enter organisation name or description",
+                statuscode: res.statusCode
+            });
+        }
+        const orgData = await Organization.create({
+            orgId :  () =>ulid(), 
+             name: orgname,
+            description:orgdescription,
+            userId: use
+        })
+    } catch (error) {
+        res.json({
+            status: "Bad Request",
+            message:"Client error",
+            statusCode: res.statusCode
+        })  
+    }
 });
-app.get("/api/organisation/:orgid", (req, res)=> {
+app.get("/api/organisation/:orgid",async (req, res)=> {
+    const id = req.params.orgid;
+    try {
+        const organisation = await Organization.findOne({
+            where: {orgId: id}
+        })
+        if (!organisation) {
+         res.status(404).json({
+            status: "error",
+            message: " no organisation found",
+            statusCode:"404"
+        });
+    
+        } else {
+            res.send({
+                status: "success",
+                message: "organisation found",
+                data:{
+                    orgId: id,
+                    namme:  ,
+                    description: organisation.description
+                }
+            })
+        
+        }
+    } catch (error) {
+        res.json({
+            status: error,
+            message:"Server error",
+            statusCode: res.statusCode
+        })  
+    }
     
 });
 app.post("/api/organisation/:orgid", (req, res)=> {
