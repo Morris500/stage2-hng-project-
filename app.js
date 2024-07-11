@@ -23,7 +23,7 @@ app.use(cookieparser());
 
 // Option 3: Passing parameters separately (other dialects)
 const DB = new Sequelize('hng-stage2', 'morris', process.env.DB_PASSKEY, {
-  host: 'localhost',
+  host: 'process.env.POSTGRES_URL',
   dialect:  'postgres',
   
   pool: {
